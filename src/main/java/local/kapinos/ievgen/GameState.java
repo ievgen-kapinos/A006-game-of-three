@@ -1,4 +1,4 @@
-package local.kapinos;
+package local.kapinos.ievgen;
 
 import java.util.Objects;
 import java.util.UUID;

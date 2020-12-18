@@ -1,4 +1,4 @@
-package local.kapinos;
+package local.kapinos.ievgen;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

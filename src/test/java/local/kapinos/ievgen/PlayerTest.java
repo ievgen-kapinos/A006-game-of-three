@@ -1,4 +1,4 @@
-package local.kapinos;
+package local.kapinos.ievgen;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -16,6 +16,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import local.kapinos.ievgen.GameState;
+import local.kapinos.ievgen.Player;
 
 @ExtendWith(MockitoExtension.class)
 public class PlayerTest

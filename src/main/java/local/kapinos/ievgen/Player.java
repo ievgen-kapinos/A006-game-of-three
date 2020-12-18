@@ -1,4 +1,4 @@
-package local.kapinos;
+package local.kapinos.ievgen;
 
 import java.util.Optional;
 import java.util.Random;

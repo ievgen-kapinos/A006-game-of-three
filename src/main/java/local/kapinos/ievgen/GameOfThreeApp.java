@@ -1,4 +1,4 @@
-package local.kapinos;
+package local.kapinos.ievgen;
 
 /**
  * Hello world!
