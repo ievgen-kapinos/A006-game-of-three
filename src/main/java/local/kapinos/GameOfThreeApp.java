@@ -4,7 +4,7 @@ package local.kapinos;
  * Hello world!
  *
  */
-public class App 
+public class GameOfThreeApp 
 {
     public static void main( String[] args )
     {
