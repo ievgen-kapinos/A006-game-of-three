@@ -5,13 +5,16 @@ import java.util.Random;
 
 public class Player
 {
-  private final int maxAutomatixInput;
+  // TODO add comment
+  public static final int NEXT_RANDOM_OFFSET = 2; 
+  
+  private final int maxAutomaticInput;
   private final Random random;
   
-  public Player(Random random, int maxAutomatixInput)
+  public Player(Random random, int maxAutomaticInput)
   {
     this.random = random;
-    this.maxAutomatixInput = maxAutomatixInput;
+    this.maxAutomaticInput = maxAutomaticInput;
   }
   
   public GameState startNewGameWithManualInput(int number)
@@ -23,7 +26,7 @@ public class Player
   {
     // we want generate number in interval [2 .. MAX_AUTOMATIC_INPUT]
     // to avoid trivial cases
-    int number = random.nextInt(maxAutomatixInput - 2) + 2;
+    int number = random.nextInt(maxAutomaticInput - NEXT_RANDOM_OFFSET) + NEXT_RANDOM_OFFSET;
     
     return new GameState(number); 
   }
@@ -32,6 +35,8 @@ public class Player
   {
     int number = gameState.getNumber();
     
+    // Selects correct number to be added {-1, 0, 1}
+    // To have result divisible by 3 without remainder   
     int added = 1 - (number + 1) % 3;  
     
     int newNumber = (number + added) / 3;

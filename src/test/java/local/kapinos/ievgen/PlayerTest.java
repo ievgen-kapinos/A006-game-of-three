@@ -17,9 +17,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import local.kapinos.ievgen.GameState;
-import local.kapinos.ievgen.Player;
-
+/**
+ * This is an example how I write UTests for domain classes. 
+ * No sense cover every class in 'technical assignment'
+ */
 @ExtendWith(MockitoExtension.class)
 public class PlayerTest
 {
@@ -46,12 +47,12 @@ public class PlayerTest
   @Test
   public void testStartNewGameWithAutomaticInput()
   {
-    when(random.nextInt(anyInt())).thenReturn(77);
+    when(random.nextInt(anyInt())).thenReturn(77 - Player.NEXT_RANDOM_OFFSET);
     
     GameState gameState = player.startNewGameWithAutomaticInput();
     
     assertNotNull(gameState.getGameToken());
-    assertEquals(79, gameState.getNumber()); 
+    assertEquals(77, gameState.getNumber()); 
   }
   
   @Test
