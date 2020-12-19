@@ -1,4 +1,4 @@
-package local.kapinos.ievgen;
+package local.ikapinos.gof;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

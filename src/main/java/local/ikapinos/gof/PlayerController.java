@@ -1,4 +1,4 @@
-package local.kapinos.ievgen;
+package local.ikapinos.gof;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

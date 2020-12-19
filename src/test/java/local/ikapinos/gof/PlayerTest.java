@@ -1,4 +1,4 @@
-package local.kapinos.ievgen;
+package local.ikapinos.gof;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -16,6 +16,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import local.ikapinos.gof.GameState;
+import local.ikapinos.gof.Player;
 
 /**
  * This is an example how I write UTests for domain classes. 
