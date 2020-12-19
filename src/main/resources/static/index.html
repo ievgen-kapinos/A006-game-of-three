@@ -16,20 +16,13 @@
 <body>
 	<div class="container">
 		
-		<div class="row">
+		<div class="row mt-4 mb-4">
 			<div class="col-12">
-				<h1>Game of Three</h1>
-			</div>
-		</div>
-		
-		<div class="row mb-4">
-			<div class="col-12">
+				
 				<div class="card">
 					<div class="card-body">
-						<h5 class="card-title">User control panel</h5>
-						<p class="card-text">User ID: <span id="userId" class="badge badge-success"></span>
-							<small id="userId" class="form-text text-muted">User ID is generated on each page load</small>
-						</p>
+						<h1 class="card-title">Game of Three</h1>
+						<p class="card-text">User control panel</p>
 					</div>
 				</div>
 			</div>
@@ -44,7 +37,7 @@
 				<div class="card">
 					<div class="card-body">
 						<h5 class="card-title">Player 1</h5>
-						<p class="card-text">Status: <span class="badge badge-secondary">Loading...</span></p>
+						<p class="card-text">Status: <span id="player1-status" class="badge badge-secondary">Loading...</span></p>
 						<div class="form-group">
 							<input id="player1-number" class="form-control" type="number" min="2" max="100" placeholder="Number" aria-describedby="player1-number-help" >
 							<small id="player1-number-help" class="form-text text-muted">Use numbers from 2 to 100 or leave field empty to generate random Number</small>	
@@ -57,7 +50,7 @@
 				<div class="card">
 					<div class="card-body">
 						<h5 class="card-title">Player 2</h5>
-						<p class="card-text">Status: <span class="badge badge-secondary">Loading...</span></p>
+						<p class="card-text">Status: <span id="player2-status" class="badge badge-secondary">Loading...</span></p>
 						<div class="form-group">
 							<input id="player2-number" class="form-control" type="number" min="2" max="100" placeholder="Number" aria-describedby="player2-number-help" >
 							<small id="player2-number-help" class="form-text text-muted">Use numbers from 2 to 100 or leave field empty to generate random Number</small>	
