@@ -1,22 +1,29 @@
 
 function startGame(palyerId) {	
-	var numberControl = $("#player" + palyerId + "-number");
+	var number = $("#player" + palyerId + "-number");
 	
-	if (!numberControl[0].reportValidity()) {
+	if (!number[0].reportValidity()) { // Check min/max values and shows erro to user
 		return;
 	}
 	
-	var gameId = Math.floor(Math.random() * 1000000);
+	var data = { 
+	  gameId: Math.floor(Math.random() * 1000000),
+	  playerId: palyerId,
+	  number: number.val() 
+	}
 	
 	$.ajax({
 	  method: "POST",
 	  url: "start-game",
-	  data: { 
-		  gameId: gameId,
-		  playerId: palyerId,
-		  number: numberControl.val() 
-	  }
+	  data: data
 	});
+	
+	appendOutput("User: Request for new Game " + JSON.stringify(data));
+}
+
+function appendOutput(text){
+    var $output = $("#output");
+    $output.val($output.val() + text + '\n');
 }
 
 $(function () {
@@ -32,4 +39,6 @@ $(function () {
     
     $("#player1-startGame").click(function() { startGame(1); });
     $("#player2-startGame").click(function() { startGame(2); });
+    
+    appendOutput("User: Loaded");
 });
