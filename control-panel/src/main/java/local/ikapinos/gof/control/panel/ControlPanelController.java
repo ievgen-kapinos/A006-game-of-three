@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class UserController
+public class ControlPanelController
 {
-  Logger logger = LoggerFactory.getLogger(UserController.class); 
+  Logger logger = LoggerFactory.getLogger(ControlPanelController.class); 
   
   @PostMapping("start-game")
   @ResponseBody
