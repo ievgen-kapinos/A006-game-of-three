@@ -10,10 +10,12 @@ public class EndGameEvent extends AbstractGameEvent
   private final int added;
 
   @JsonCreator
-  public EndGameEvent(@JsonProperty("gameId") int gameId,
+  public EndGameEvent(@JsonProperty("serviceName") String serviceName,
+                      @JsonProperty("gameId") int gameId,
                       @JsonProperty("added") int added)
   {
-    super(gameId);
+    super(serviceName, gameId);
+    
     this.added = added;
   }
   

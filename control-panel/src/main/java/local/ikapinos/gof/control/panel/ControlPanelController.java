@@ -62,17 +62,17 @@ public class ControlPanelController
     }
     else if (playerId == 2)
     {
-      playerIngressTopic = player1IngressTopic;
+      playerIngressTopic = player2IngressTopic;
     }
     else 
     {
       throw new IllegalArgumentException("Player Id should be 1 or 2, but got " + playerId);
     }
     
-    AbstractGameEvent event = new StartGameEvent(gameId, number);
+    AbstractGameEvent event = new StartGameEvent(serviceName, gameId, number);
     
     kafkaTemplate.send(playerIngressTopic, 
-                       serviceName,
+                       null, // Partitions not used. No need for key. Otherwise use gameId (need to be ordered)
                        event);
     
     logger.info("Produced: topic={}, message={}", playerIngressTopic, event);
@@ -84,24 +84,6 @@ public class ControlPanelController
   {
     logger.info("Consumed: {}", record);
     
-    simpTemplate.convertAndSend("/topic/" + record.value().getGameId(),
-                                record.value());
-    
-//    if (gameEvent instanceof StartGameEvent) // Java 8. Need explicit casting
-//    {
-//      startGame((StartGameEvent) gameEvent);
-//    }
-//    else if (gameEvent instanceof ContinueGameEvent)
-//    {
-//      continueGame((ContinueGameEvent) gameEvent);
-//    }
-//    else if (gameEvent instanceof EndGameEvent)
-//    {
-//      // Nothing to do. To be handled on control-panel
-//    }
-//    else
-//    {
-//      new IllegalArgumentException("Unknown game event: " + gameEvent);
-//    }
+    simpTemplate.convertAndSend("/topic/" + record.value().getGameId(), record.value());
   }
 }

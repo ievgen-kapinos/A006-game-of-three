@@ -72,7 +72,8 @@ public class PlayerService
       number = random.nextInt(maxNumber - NEXT_RANDOM_OFFSET) + NEXT_RANDOM_OFFSET;
     }
         
-    AbstractGameEvent event = new ContinueGameEvent(startGameEvent.getGameId(), 
+    AbstractGameEvent event = new ContinueGameEvent(serviceName,
+                                                    startGameEvent.getGameId(), 
                                                     null, // First move
                                                     number);   
     producedPeerEvent(event);
@@ -92,14 +93,16 @@ public class PlayerService
     if (newNumber == 1)
     { 
       // Game ended 
-      event = new EndGameEvent(continueGameEvent.getGameId(),
-                                 added);
+      event = new EndGameEvent(serviceName,
+                               continueGameEvent.getGameId(), 
+                               added);
     }
     else
     {
-      event = new ContinueGameEvent(continueGameEvent.getGameId(), 
-                                      added,
-                                      newNumber);
+      event = new ContinueGameEvent(serviceName,
+                                    continueGameEvent.getGameId(), 
+                                    added, 
+                                    newNumber);
     }
     
     producedPeerEvent(event);
@@ -108,7 +111,7 @@ public class PlayerService
   private void producedPeerEvent(AbstractGameEvent event)
   {
     kafkaTemplate.send(peerIngressTopic, 
-                       serviceName,
+                       null, // Partitions not used. No need for key. Otherwise use gameId (need to be ordered)
                        event);
 
     logger.info("Produced: topic={}, key={}, message={}", peerIngressTopic, serviceName, event); 

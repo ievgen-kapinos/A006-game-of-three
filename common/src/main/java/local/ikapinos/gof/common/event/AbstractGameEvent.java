@@ -7,11 +7,19 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
 public abstract class AbstractGameEvent
 {
+  private final String serviceName;
   private final int gameId;
 
-  public AbstractGameEvent(int gameId)
+  public AbstractGameEvent(String serviceName, 
+                           int gameId)
   {
+    this.serviceName = serviceName;
     this.gameId = gameId;
+  }
+  
+  public String getServiceName()
+  {
+    return serviceName;
   }
   
   public int getGameId()
@@ -25,6 +33,7 @@ public abstract class AbstractGameEvent
     final int prime = 31;
     int result = 1;
     result = prime * result + gameId;
+    result = prime * result + ((serviceName == null) ? 0 : serviceName.hashCode());
     return result;
   }
 
@@ -40,12 +49,20 @@ public abstract class AbstractGameEvent
     AbstractGameEvent other = (AbstractGameEvent)obj;
     if (gameId != other.gameId)
       return false;
+    if (serviceName == null)
+    {
+      if (other.serviceName != null)
+        return false;
+    }
+    else if (!serviceName.equals(other.serviceName))
+      return false;
     return true;
   }
   
   @Override
   public String toString()
   {
-    return "gameId=" + gameId;
+    return "serviceName=" + serviceName + 
+        ", gameId=" + gameId;
   }
 }

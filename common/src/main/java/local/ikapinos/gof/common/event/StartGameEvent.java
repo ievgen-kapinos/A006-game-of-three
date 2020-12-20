@@ -10,10 +10,11 @@ public class StartGameEvent extends AbstractGameEvent
   private final Integer number; // Null, if to be auto-generated bu Player
 
   @JsonCreator
-  public StartGameEvent(@JsonProperty("gameId") int gameId,
+  public StartGameEvent(@JsonProperty("serviceName") String serviceName,
+                        @JsonProperty("gameId") int gameId,
                         @JsonProperty("number") Integer number)
   {
-    super(gameId);
+    super(serviceName, gameId);
     
     if (number != null && number < 2)
     {

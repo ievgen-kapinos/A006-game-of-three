@@ -2,6 +2,7 @@ package local.ikapinos.gof.player;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -29,6 +30,7 @@ import local.ikapinos.gof.common.event.StartGameEvent;
 @ExtendWith(MockitoExtension.class)
 public class PlayerServiceTest
 {
+  private final String peerServiceName = "peerServiceName";
   private final int gameId = 888;
   @MockBean
   private Random random;
@@ -44,61 +46,61 @@ public class PlayerServiceTest
   {
     when(random.nextInt(anyInt())).thenReturn(77 - PlayerService.NEXT_RANDOM_OFFSET);
     
-    player.handleEvent(createConsumerRecord(new StartGameEvent(gameId, null)));
+    player.handleEvent(createConsumerRecord(new StartGameEvent(peerServiceName, gameId, null)));
     
     verify(kafkaTemplate).send(eq("peer-ingress"), 
-                               eq("player"), 
-                               eq(new ContinueGameEvent(gameId, null, 77)));
+                               isNull(), 
+                               eq(new ContinueGameEvent("player", gameId, null, 77)));
   }
 
   @Test
   public void testStartNewGameWithManualInput()
   {    
-    player.handleEvent(createConsumerRecord(new StartGameEvent(gameId, 56)));
+    player.handleEvent(createConsumerRecord(new StartGameEvent(peerServiceName, gameId, 56)));
     
     verify(kafkaTemplate).send(eq("peer-ingress"), 
-                               eq("player"), 
-                               eq(new ContinueGameEvent(gameId, null, 56)));
+                               isNull(), 
+                               eq(new ContinueGameEvent("player", gameId, null, 56)));
   }
 
   @Test
   public void testContinueGameAddOne()
   {
-    player.handleEvent(createConsumerRecord(new ContinueGameEvent(gameId, null, 56)));
+    player.handleEvent(createConsumerRecord(new ContinueGameEvent(peerServiceName, gameId, null, 56)));
     
     verify(kafkaTemplate).send(eq("peer-ingress"), 
-                               eq("player"), 
-                               eq(new ContinueGameEvent(gameId, 1, 19))); // (56+1)/3 = 19
+                               isNull(), 
+                               eq(new ContinueGameEvent("player", gameId, 1, 19))); // (56+1)/3 = 19
   }
 
   @Test
   public void testContinueGameMinusOne()
   {
-    player.handleEvent(createConsumerRecord(new ContinueGameEvent(gameId, 1, 19)));
+    player.handleEvent(createConsumerRecord(new ContinueGameEvent(peerServiceName, gameId, 1, 19)));
     
     verify(kafkaTemplate).send(eq("peer-ingress"), 
-                               eq("player"), 
-                               eq(new ContinueGameEvent(gameId, -1, 6))); // (19-1)/3 = 6
+                               isNull(), 
+                               eq(new ContinueGameEvent("player", gameId, -1, 6))); // (19-1)/3 = 6
   }
   
   @Test
   public void testContinueGamePlusZero()
   {
-    player.handleEvent(createConsumerRecord(new ContinueGameEvent(gameId, -1, 6)));
+    player.handleEvent(createConsumerRecord(new ContinueGameEvent(peerServiceName, gameId, -1, 6)));
     
     verify(kafkaTemplate).send(eq("peer-ingress"), 
-                               eq("player"), 
-                               eq(new ContinueGameEvent(gameId, 0, 2))); // (6+0)/3 = 2
+                               isNull(), 
+                               eq(new ContinueGameEvent("player", gameId, 0, 2))); // (6+0)/3 = 2
   }
   
   @Test
   public void testContinueGameAndWin()
   {
-    player.handleEvent(createConsumerRecord(new ContinueGameEvent(gameId, 0, 3)));
+    player.handleEvent(createConsumerRecord(new ContinueGameEvent(peerServiceName, gameId, 0, 3)));
     
     verify(kafkaTemplate).send(eq("peer-ingress"), 
-                               eq("player"), 
-                               eq(new EndGameEvent(gameId, 0))); // (2+1)/3 = 1
+                               isNull(), 
+                               eq(new EndGameEvent("player", gameId, 0))); // (2+1)/3 = 1
 
   }
  
