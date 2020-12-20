@@ -1,5 +1,6 @@
 package local.ikapinos.gof.control.panel;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import local.ikapinos.gof.common.event.AbstractGameEvent;
-import local.ikapinos.gof.common.event.ContinueGameEvent;
-import local.ikapinos.gof.common.event.EndGameEvent;
 import local.ikapinos.gof.common.event.StartGameEvent;
 
 @Controller
@@ -22,6 +21,9 @@ public class ControlPanelController
 {
   private static final Logger logger = LoggerFactory.getLogger(ControlPanelController.class); 
   
+  @Value("${gof.service-name}")
+  private String serviceName;
+
   @Value("${gof.max-number: 100}")
   private int maxNumber;
   
@@ -63,20 +65,20 @@ public class ControlPanelController
       throw new IllegalArgumentException("Player Id should be 1 or 2, but got " + playerId);
     }
     
-    AbstractGameEvent message = new StartGameEvent(gameId, number);
+    AbstractGameEvent event = new StartGameEvent(gameId, number);
     
     kafkaTemplate.send(playerIngressTopic, 
-                       null, // No need to key since single partition is used 
-                       message);
+                       serviceName,
+                       event);
     
-    logger.info("Produced: topic={}, message={}", playerIngressTopic, message);
+    logger.info("Produced: topic={}, message={}", playerIngressTopic, event);
   }
   
   @KafkaListener(topics = {"${gof.kafka.player1-ingress-topic}", 
                            "${gof.kafka.player2-ingress-topic}"})
-  public void handleIngressEvent(AbstractGameEvent gameEvent) 
+  public void handleEvent(ConsumerRecord<String, AbstractGameEvent> record) 
   {
-    logger.info("Consumed: {}", gameEvent);
+    logger.info("Consumed: {}", record);
     
 //    if (gameEvent instanceof StartGameEvent) // Java 8. Need explicit casting
 //    {

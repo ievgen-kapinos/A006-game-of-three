@@ -6,6 +6,7 @@ spring:
     client-id: player1
   
 gof:
+  service-name: player1
   kafka:
     ingress-topic: player1-ingress    
     peer-ingress-topic: player2-ingress    

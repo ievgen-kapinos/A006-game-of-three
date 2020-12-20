@@ -31,6 +31,38 @@ public class ContinueGameEvent extends AbstractGameEvent
   }
 
   @Override
+  public int hashCode()
+  {
+    final int prime = 31;
+    int result = super.hashCode();
+    result = prime * result + ((added == null) ? 0 : added.hashCode());
+    result = prime * result + number;
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj)
+  {
+    if (this == obj)
+      return true;
+    if (!super.equals(obj))
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    ContinueGameEvent other = (ContinueGameEvent)obj;
+    if (added == null)
+    {
+      if (other.added != null)
+        return false;
+    }
+    else if (!added.equals(other.added))
+      return false;
+    if (number != other.number)
+      return false;
+    return true;
+  }
+
+  @Override
   public String toString()
   {
     return "ContinueGameEvent [" + super.toString() + 

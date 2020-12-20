@@ -2,6 +2,7 @@ package local.ikapinos.gof.player;
 
 import java.util.Random;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,38 +23,43 @@ public class PlayerService
   
   public static final int NEXT_RANDOM_OFFSET = 2; 
   
+  @Value("${gof.service-name}")
+  private String serviceName;
+
   @Value("${gof.max-number: 100}")
   private int maxNumber;
-  
-  @Autowired
-  private Random random;
   
   @Value("${gof.kafka.peer-ingress-topic}") 
   private String peerIngressTopic;
   
   @Autowired
+  private Random random;
+  
+  @Autowired
   private KafkaTemplate<String, AbstractGameEvent> kafkaTemplate;
 
   @KafkaListener(topics = "${gof.kafka.ingress-topic}")
-  public void handleIngressEvent(AbstractGameEvent gameEvent) 
+  public void handleEvent(ConsumerRecord<String, AbstractGameEvent> record) 
   {
-    logger.info("Consumed: {}", gameEvent);
+    logger.info("Consumed: {}", record);
     
-    if (gameEvent instanceof StartGameEvent) // Java 8. Need explicit casting
+    AbstractGameEvent event = record.value();
+    
+    if (event instanceof StartGameEvent) // Java 8. Need explicit casting
     {
-      startGame((StartGameEvent) gameEvent);
+      startGame((StartGameEvent) event);
     }
-    else if (gameEvent instanceof ContinueGameEvent)
+    else if (event instanceof ContinueGameEvent)
     {
-      continueGame((ContinueGameEvent) gameEvent);
+      continueGame((ContinueGameEvent) event);
     }
-    else if (gameEvent instanceof EndGameEvent)
+    else if (event instanceof EndGameEvent)
     {
       // Nothing to do. To be handled on control-panel
     }
     else
     {
-      new IllegalArgumentException("Unknown game event: " + gameEvent);
+      new IllegalArgumentException("Unknown game event: " + event);
     }
   }
   
@@ -66,10 +72,10 @@ public class PlayerService
       number = random.nextInt(maxNumber - NEXT_RANDOM_OFFSET) + NEXT_RANDOM_OFFSET;
     }
         
-    AbstractGameEvent message = new ContinueGameEvent(startGameEvent.getGameId(), 
-                                                      null, // First move
-                                                      number);   
-    producedPeerEvent(message);
+    AbstractGameEvent event = new ContinueGameEvent(startGameEvent.getGameId(), 
+                                                    null, // First move
+                                                    number);   
+    producedPeerEvent(event);
   }
   
   private void continueGame(ContinueGameEvent continueGameEvent)
@@ -82,29 +88,29 @@ public class PlayerService
     
     int newNumber = (number + added) / 3;
     
-    AbstractGameEvent message;
+    AbstractGameEvent event;
     if (newNumber == 1)
     { 
       // Game ended 
-      message = new EndGameEvent(continueGameEvent.getGameId(),
+      event = new EndGameEvent(continueGameEvent.getGameId(),
                                  added);
     }
     else
     {
-      message = new ContinueGameEvent(continueGameEvent.getGameId(), 
+      event = new ContinueGameEvent(continueGameEvent.getGameId(), 
                                       added,
                                       newNumber);
     }
     
-    producedPeerEvent(message);
+    producedPeerEvent(event);
   }
   
-  private void producedPeerEvent(AbstractGameEvent message)
+  private void producedPeerEvent(AbstractGameEvent event)
   {
     kafkaTemplate.send(peerIngressTopic, 
-                       null, // No need to key since single partition is used 
-                       message);
+                       serviceName,
+                       event);
 
-    logger.info("Produced: topic={}, message={}", peerIngressTopic, message); 
+    logger.info("Produced: topic={}, key={}, message={}", peerIngressTopic, serviceName, event); 
   }
 }

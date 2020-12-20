@@ -5,11 +5,10 @@ spring:
       auto-offset-reset: earliest
       group-id: player
     client-id: player
-      
-  
+
 gof:
-  max-number: 102
+  service-name: player
+  max-number: 150
   kafka:
-    control-panel-ingress-topic: control-panel-ingress
     ingress-topic: ingress    
     peer-ingress-topic: peer-ingress    
