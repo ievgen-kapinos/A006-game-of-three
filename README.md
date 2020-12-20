@@ -4,7 +4,9 @@
 Game is running using five microservices:
 * `zookeeper` - infrastructure, kafka's dependency  (third party)
 * `kafka` - infrastructure (third party)
-* `control-panel` - UI interface which allows start game on `player1` or `player2`
+* `control-panel` - UI interface which allows:
+   * Start game on `player1` or `player2`
+   * View game moves using WebSockets
 * `player1` - "player" instance #1
 * `player1` - "player" instance #2
 
