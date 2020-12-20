@@ -1,0 +1,39 @@
+version: "3.7"
+
+networks:
+  default:
+    name: gof-net
+    
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      
+  control-panel:
+    image: ikapinos/game-of-three-control-panel
+    container_name: control-panel
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    ports:
+      - "8080:8080"
+  
+  player1:
+    image: ikapinos/game-of-three-player
+    container_name: player1
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_PROFILES_ACTIVE: player1
+      
+  player2:
+    image: ikapinos/game-of-three-player
+    container_name: player2
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_PROFILES_ACTIVE: player2
+      

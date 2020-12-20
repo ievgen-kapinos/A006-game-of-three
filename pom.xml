@@ -24,7 +24,7 @@
     <module>player</module>
     <module>control-panel</module>
   </modules>
-
+  
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -54,12 +54,17 @@
   </dependencies>
 
   <build>
-    <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-      </plugin>
-    </plugins>
+      <plugins>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <!-- Solution from https://stackoverflow.com/questions/41092200/run-mvn-spring-bootrun-from-parent-module 
+               Probably may be better -->
+          <configuration>
+            <skip>true</skip>
+          </configuration>
+        </plugin>
+      </plugins>
   </build>
 
 </project>

@@ -18,8 +18,8 @@
       <artifactId>game-of-three-common</artifactId>
       <version>${project.version}</version>
     </dependency>
-    
-    <!-- Server (extend with websocket facilities)-->
+
+    <!-- Server (extend with websocket facilities) -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-websocket</artifactId>
@@ -55,5 +55,17 @@
       <version>2.5.4</version>
     </dependency>
   </dependencies>
-  
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <skip>false</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
 </project>
