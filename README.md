@@ -1,6 +1,43 @@
 # Game of three
 
-## Run from sources (development)
+## Overall
+Game is running using five microservices:
+* `zookeeper` - infrastructure, kafka's dependency  (third party)
+* `kafka` - infrastructure (third party)
+* `control-panel` - UI interface which allows start game on `player1` or `player2`
+* `player1` - "player" instance #1
+* `player1` - "player" instance #2
+
+Two `kafka` topics used to route messages for player 1 and Player 2 
+
+## Run all in docker (deploy)
+1. Install and run `docker` and `docker-compose`
+1. Go to project root directory
+1. Create Spring Boot `fat-jars`  
+   ```
+   mvn clean package
+   ```
+   ![ui.png](/docs/mvn.png)
+1. Pack Docker images
+   ```
+   docker build -t ikapinos/game-of-three-control-panel ./control-panel
+   docker build -t ikapinos/game-of-three-player ./player
+   ```
+1. Start cluster
+   ```
+   docker-compose up -d
+   ```
+   ![cmd.png](/docs/cmd.png)
+   
+   ![cmd.png](/docs/docker.png)
+   
+1. Open `control-panel` web page
+   ```
+   http://localhost:8080/
+   ```
+   ![ui.png](/docs/ui.png)
+
+## Run from source code (development)
 1. Install `maven`, `zookeeper` and `kafka` 
 1. Run `zookeeper` and `kafka` with default parameters
 1. Go to project root directory
@@ -19,27 +56,6 @@
 1. Open `control-panel` web page
    ```
    http://localhost:8080
-   ```
-
-## Run from cluster (deploy)
-1. Install and run `docker` and `docker-compose`
-1. Go to project root directory
-1. Create Spring Boot `fat-jars`  
-   ```
-   mvn clean package
-   ```
-1. Pack Docker images
-   ```
-   docker build -t ikapinos/game-of-three-control-panel ./control-panel
-   docker build -t ikapinos/game-of-three-player ./player
-   ```
-1. Start cluster
-	```
-	docker-compose up -d
-	```
-1. Open `control-panel` web page
-   ```
-   http://localhost:8080/
    ```
 
 ## Fun fact
