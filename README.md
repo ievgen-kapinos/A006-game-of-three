@@ -8,7 +8,7 @@ Game is running using five microservices:
    * Start game on `player1` or `player2`
    * View game moves using WebSockets
 * `player1` - "player" instance #1
-* `player1` - "player" instance #2
+* `player2` - "player" instance #2
 
 Two `kafka` topics used to route messages for player 1 and Player 2 
 
