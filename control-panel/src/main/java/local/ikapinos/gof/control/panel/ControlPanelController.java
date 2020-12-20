@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +36,9 @@ public class ControlPanelController
   
   @Autowired
   private KafkaTemplate<String, AbstractGameEvent> kafkaTemplate;
+  
+  @Autowired
+  private SimpMessagingTemplate simpTemplate; 
   
   @GetMapping("/")
   public String index( Model model ) 
@@ -79,6 +83,9 @@ public class ControlPanelController
   public void handleEvent(ConsumerRecord<String, AbstractGameEvent> record) 
   {
     logger.info("Consumed: {}", record);
+    
+    simpTemplate.convertAndSend("/topic/" + record.value().getGameId(),
+                                record.value());
     
 //    if (gameEvent instanceof StartGameEvent) // Java 8. Need explicit casting
 //    {
