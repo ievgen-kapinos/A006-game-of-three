@@ -5,6 +5,9 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     client-id: control-panel
+    consumer:
+      auto-offset-reset: earliest
+      group-id: control-panel
 
 gof:
   max-number : 99

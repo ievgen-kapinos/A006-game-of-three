@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,8 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import local.ikapinos.gof.common.AbstractGameEvent;
-import local.ikapinos.gof.common.StartGameEvent;
+import local.ikapinos.gof.common.event.AbstractGameEvent;
+import local.ikapinos.gof.common.event.ContinueGameEvent;
+import local.ikapinos.gof.common.event.EndGameEvent;
+import local.ikapinos.gof.common.event.StartGameEvent;
 
 @Controller
 public class ControlPanelController
@@ -67,5 +70,29 @@ public class ControlPanelController
                        message);
     
     logger.info("Produced: topic={}, message={}", playerIngressTopic, message);
+  }
+  
+  @KafkaListener(topics = {"${gof.kafka.player1-ingress-topic}", 
+                           "${gof.kafka.player2-ingress-topic}"})
+  public void handleIngressEvent(AbstractGameEvent gameEvent) 
+  {
+    logger.info("Consumed: {}", gameEvent);
+    
+//    if (gameEvent instanceof StartGameEvent) // Java 8. Need explicit casting
+//    {
+//      startGame((StartGameEvent) gameEvent);
+//    }
+//    else if (gameEvent instanceof ContinueGameEvent)
+//    {
+//      continueGame((ContinueGameEvent) gameEvent);
+//    }
+//    else if (gameEvent instanceof EndGameEvent)
+//    {
+//      // Nothing to do. To be handled on control-panel
+//    }
+//    else
+//    {
+//      new IllegalArgumentException("Unknown game event: " + gameEvent);
+//    }
   }
 }

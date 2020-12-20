@@ -10,10 +10,10 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import local.ikapinos.gof.common.AbstractGameEvent;
-import local.ikapinos.gof.common.ContinueGameEvent;
-import local.ikapinos.gof.common.EndGameEvent;
-import local.ikapinos.gof.common.StartGameEvent;
+import local.ikapinos.gof.common.event.AbstractGameEvent;
+import local.ikapinos.gof.common.event.ContinueGameEvent;
+import local.ikapinos.gof.common.event.EndGameEvent;
+import local.ikapinos.gof.common.event.StartGameEvent;
 
 @Service
 public class PlayerService

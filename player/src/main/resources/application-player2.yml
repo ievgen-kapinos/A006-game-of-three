@@ -4,8 +4,6 @@ server:
 spring:
   kafka:
     client-id: player2
-    consumer:
-      group-id: player2
     
 gof:
   kafka:

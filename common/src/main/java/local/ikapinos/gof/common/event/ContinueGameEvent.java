@@ -1,4 +1,4 @@
-package local.ikapinos.gof.common;
+package local.ikapinos.gof.common.event;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
