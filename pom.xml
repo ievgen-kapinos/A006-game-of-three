@@ -12,14 +12,15 @@
   </parent>
 
   <groupId>local.ikapinos.gof</groupId>
-  <artifactId>game-of-tree</artifactId>
+  <artifactId>game-of-three</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>game-of-tree</name>
+  <name>game-of-three</name>
   <url>https://github.com/ievgen-kapinos/A006-game-of-three</url>
 
   <modules>
+    <module>common</module>
     <module>player</module>
     <module>control-panel</module>
   </modules>

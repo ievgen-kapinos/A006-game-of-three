@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.springframework.ide.eclipse.boot.launch">
-<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/player/src/main/java/local/ikapinos/gof/player/PlayerApplication.java"/>
-</listAttribute>
-<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
-<listEntry value="1"/>
-</listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.springframework.ide.eclipse.boot.launch.BootMavenClassPathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="local.ikapinos.gof.player.PlayerApplication"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="player"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="game-of-three-player"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.springframework.ide.eclipse.boot.launch.BootMavenSourcePathProvider"/>
 <stringAttribute key="spring.boot.app.properties" value=""/>
 <booleanAttribute key="spring.boot.dash.hidden" value="false"/>

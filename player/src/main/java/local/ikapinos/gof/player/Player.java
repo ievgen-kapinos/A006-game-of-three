@@ -13,7 +13,6 @@ public class Player
   @Autowired
   private KafkaTemplate<Integer, Integer> template;
   
-  // TODO add comment
   public static final int NEXT_RANDOM_OFFSET = 2; 
   
   private final int maxAutomaticNumber;

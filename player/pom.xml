@@ -7,9 +7,17 @@
 
   <parent>
     <groupId>local.ikapinos.gof</groupId>
-    <artifactId>game-of-tree</artifactId>
+    <artifactId>game-of-three</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>player</artifactId>
+  <artifactId>game-of-three-player</artifactId>
 
+  <dependencies>
+    <dependency>
+      <groupId>local.ikapinos.gof</groupId>
+      <artifactId>game-of-three-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+  
 </project>

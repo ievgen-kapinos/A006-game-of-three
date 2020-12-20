@@ -1,3 +1,6 @@
 spring:
   kafka:
     bootstrapServers: localhost:9092
+    
+gof:
+  max-automatic-number: 102
