@@ -1,0 +1,15 @@
+spring:
+  kafka:
+    bootstrapServers: localhost:9092
+    consumer:
+      auto-offset-reset: earliest
+      group-id: player
+    client-id: player
+      
+  
+gof:
+  max-number: 102
+  kafka:
+    control-panel-ingress-topic: control-panel-ingress
+    ingress-topic: ingress    
+    peer-ingress-topic: peer-ingress    

@@ -19,8 +19,8 @@ public class ControlPanelController
 {
   private static final Logger logger = LoggerFactory.getLogger(ControlPanelController.class); 
   
-  @Value("${gof.max-manual-number: 100}")
-  private int maxManualNumber;
+  @Value("${gof.max-number: 100}")
+  private int maxNumber;
   
   @Value("${gof.kafka.player1-ingress-topic}") 
   private String player1IngressTopic;
@@ -34,7 +34,7 @@ public class ControlPanelController
   @GetMapping("/")
   public String index( Model model ) 
   {
-    model.addAttribute("maxManualNumber", maxManualNumber);
+    model.addAttribute("maxNumber", maxNumber);
     return "index";
   }
   
@@ -57,7 +57,7 @@ public class ControlPanelController
     }
     else 
     {
-      throw new IllegalArgumentException("playerId should be 1 or 2, got " + playerId);
+      throw new IllegalArgumentException("Player Id should be 1 or 2, but got " + playerId);
     }
     
     AbstractGameEvent message = new StartGameEvent(gameId, number);
@@ -67,6 +67,5 @@ public class ControlPanelController
                        message);
     
     logger.info("Produced: topic={}, message={}", playerIngressTopic, message);
-
   }
 }

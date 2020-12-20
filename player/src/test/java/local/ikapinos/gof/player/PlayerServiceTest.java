@@ -11,33 +11,28 @@ import static org.mockito.Mockito.when;
 import java.util.Optional;
 import java.util.Random;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import local.ikapinos.gof.player.GameState;
-import local.ikapinos.gof.player.PlayerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.kafka.test.context.EmbeddedKafka;
 
 /**
- * This is an example how I write UTests for domain classes. 
- * No sense cover every class in 'technical assignment'
+ * UTests sample
  */
+@SpringBootTest 
+@EmbeddedKafka(topics = { "control-panel-ingress", "peer-ingress", "ingress" })
 @ExtendWith(MockitoExtension.class)
 public class PlayerServiceTest
 {
-  @Mock
+  @MockBean
   private Random random;
-  
+
+  @Autowired 
   private PlayerService player;
-  
-  @BeforeEach
-  public void beforeEach()
-  {
-    player = new PlayerService(random, 100);
-  }
-  
+    
   @Test
   public void testStartNewGameWithManualInput()
   {

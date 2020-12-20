@@ -7,9 +7,8 @@ spring:
     client-id: control-panel
 
 gof:
+  max-number : 99
   kafka:
-    ingress-topic: control-panel-ingress
     player1-ingress-topic: player1-ingress
     player2-ingress-topic: player2-ingress
-  max-manual-number : 102
   

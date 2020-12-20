@@ -5,6 +5,4 @@ spring:
       auto-offset-reset: earliest
           
 gof:
-  kafka:
-    control-panel-ingress-topic: "control-panel-ingress"
-  max-automatic-number: 102
+  max-number: 99

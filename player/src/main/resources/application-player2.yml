@@ -10,3 +10,5 @@ spring:
 gof:
   kafka:
     ingress-topic: player2-ingress
+    peer-ingress-topic: player1-ingress    
+    

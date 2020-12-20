@@ -34,8 +34,8 @@
 						<h5 class="card-title">Player 1</h5>
 						<p class="card-text">Status: <span id="player1-status" class="badge badge-secondary">Loading...</span></p>
 						<div class="form-group">
-							<input id="player1-number" class="form-control" type="number" min="2" th:max="${maxManualNumber}" placeholder="Number" aria-describedby="player1-number-help" >
-							<small id="player1-number-help" class="form-text text-muted">Use numbers from 2 to <span th:text="${maxManualNumber}">100</span> or leave field empty to generate random Number</small>	
+							<input id="player1-number" class="form-control" type="number" min="2" th:max="${maxNumber}" placeholder="Number" aria-describedby="player1-number-help" >
+							<small id="player1-number-help" class="form-text text-muted">Use numbers from 2 to <span th:text="${maxNumber}">100</span> or leave field empty to generate random Number</small>	
 						</div>
 						<button id="player1-startGame" class="btn btn-primary" disabled>Start Game</button>
 					</div>
@@ -47,8 +47,8 @@
 						<h5 class="card-title">Player 2</h5>
 						<p class="card-text">Status: <span id="player2-status" class="badge badge-secondary">Loading...</span></p>
 						<div class="form-group">
-							<input id="player2-number" class="form-control" type="number" min="2" th:max="${maxManualNumber}" placeholder="Number" aria-describedby="player2-number-help" >
-							<small id="player2-number-help" class="form-text text-muted">Use numbers from 2 to <span th:text="${maxManualNumber}">100</span> or leave field empty to generate random Number</small>	
+							<input id="player2-number" class="form-control" type="number" min="2" th:max="${maxNumber}" placeholder="Number" aria-describedby="player2-number-help" >
+							<small id="player2-number-help" class="form-text text-muted">Use numbers from 2 to <span th:text="${maxNumber}">100</span> or leave field empty to generate random Number</small>	
 						</div>
 						<button id="player2-startGame" class="btn btn-primary" disabled>Start Game</button>
 					</div>

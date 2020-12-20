@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("start-game")
 public class StartGameEvent extends AbstractGameEvent
 {
-  private final Integer number;
+  private final Integer number; // Null, if to be auto-generated
 
   @JsonCreator
   public StartGameEvent(@JsonProperty("gameId") int gameId,
