@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>Game of Three</title>
 
@@ -21,16 +21,12 @@
 				<div class="card">
 					<div class="card-body">
 						<h1 class="card-title">Control panel</h1>
-						<p class="card-text">Allows interact with Player instances</p>
+						<p class="card-text">Allows User to interact with Player 1 and Player 2 instances</p>
 					</div>
 				</div>
 			</div>
 		</div>
 		
-<!-- TODO
-     Value 100 is hardcoded here and for Player2. 
-     Value should go from server. E.g. using Thymeleaf
--->
 		<div class="row mb-4">
 			<div class="col-sm-6">
 				<div class="card">
@@ -38,8 +34,8 @@
 						<h5 class="card-title">Player 1</h5>
 						<p class="card-text">Status: <span id="player1-status" class="badge badge-secondary">Loading...</span></p>
 						<div class="form-group">
-							<input id="player1-number" class="form-control" type="number" min="2" max="100" placeholder="Number" aria-describedby="player1-number-help" >
-							<small id="player1-number-help" class="form-text text-muted">Use numbers from 2 to 100 or leave field empty to generate random Number</small>	
+							<input id="player1-number" class="form-control" type="number" min="2" th:max="${maxManualNumber}" placeholder="Number" aria-describedby="player1-number-help" >
+							<small id="player1-number-help" class="form-text text-muted">Use numbers from 2 to <span th:text="${maxManualNumber}">100</span> or leave field empty to generate random Number</small>	
 						</div>
 						<button id="player1-startGame" class="btn btn-primary" disabled>Start Game</button>
 					</div>
@@ -51,8 +47,8 @@
 						<h5 class="card-title">Player 2</h5>
 						<p class="card-text">Status: <span id="player2-status" class="badge badge-secondary">Loading...</span></p>
 						<div class="form-group">
-							<input id="player2-number" class="form-control" type="number" min="2" max="100" placeholder="Number" aria-describedby="player2-number-help" >
-							<small id="player2-number-help" class="form-text text-muted">Use numbers from 2 to 100 or leave field empty to generate random Number</small>	
+							<input id="player2-number" class="form-control" type="number" min="2" th:max="${maxManualNumber}" placeholder="Number" aria-describedby="player2-number-help" >
+							<small id="player2-number-help" class="form-text text-muted">Use numbers from 2 to <span th:text="${maxManualNumber}">100</span> or leave field empty to generate random Number</small>	
 						</div>
 						<button id="player2-startGame" class="btn btn-primary" disabled>Start Game</button>
 					</div>

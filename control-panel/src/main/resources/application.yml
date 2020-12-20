@@ -1,2 +1,5 @@
 server:
   port : 8080
+
+gof:
+  max-manual-number : 102

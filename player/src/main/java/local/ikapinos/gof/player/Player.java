@@ -1,20 +1,34 @@
-package local.ikapinos.gof;
+package local.ikapinos.gof.player;
 
 import java.util.Optional;
 import java.util.Random;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+
 public class Player
 {
+  @Autowired
+  private KafkaTemplate<Integer, Integer> template;
+  
   // TODO add comment
   public static final int NEXT_RANDOM_OFFSET = 2; 
   
-  private final int maxAutomaticInput;
+  private final int maxAutomaticNumber;
   private final Random random;
   
-  public Player(Random random, int maxAutomaticInput)
+  public Player(Random random, int maxAutomaticNumber)
   {
     this.random = random;
-    this.maxAutomaticInput = maxAutomaticInput;
+    this.maxAutomaticNumber = maxAutomaticNumber;
+  }
+  
+  @PostConstruct
+  private void postConstruct() 
+  {
+    template.send("topic1", 12, 21);
   }
   
   public GameState startNewGameWithManualInput(int number)
@@ -26,7 +40,7 @@ public class Player
   {
     // we want generate number in interval [2 .. MAX_AUTOMATIC_INPUT]
     // to avoid trivial cases
-    int number = random.nextInt(maxAutomaticInput - NEXT_RANDOM_OFFSET) + NEXT_RANDOM_OFFSET;
+    int number = random.nextInt(maxAutomaticNumber - NEXT_RANDOM_OFFSET) + NEXT_RANDOM_OFFSET;
     
     return new GameState(number); 
   }

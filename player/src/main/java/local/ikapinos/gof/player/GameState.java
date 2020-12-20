@@ -1,4 +1,4 @@
-package local.ikapinos.gof;
+package local.ikapinos.gof.player;
 
 import java.util.Objects;
 import java.util.UUID;
