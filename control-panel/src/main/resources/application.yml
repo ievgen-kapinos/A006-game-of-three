@@ -1,5 +1,15 @@
 server:
   port : 8080
 
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    client-id: control-panel
+
 gof:
+  kafka:
+    ingress-topic: control-panel-ingress
+    player1-ingress-topic: player1-ingress
+    player2-ingress-topic: player2-ingress
   max-manual-number : 102
+  

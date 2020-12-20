@@ -1,2 +1,12 @@
 server:
   port : 8082
+  
+spring:
+  kafka:
+    client-id: player2
+    consumer:
+      group-id: player2
+    
+gof:
+  kafka:
+    ingress-topic: player2-ingress

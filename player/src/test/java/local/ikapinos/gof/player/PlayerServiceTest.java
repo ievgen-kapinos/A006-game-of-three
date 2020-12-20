@@ -18,24 +18,24 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import local.ikapinos.gof.player.GameState;
-import local.ikapinos.gof.player.Player;
+import local.ikapinos.gof.player.PlayerService;
 
 /**
  * This is an example how I write UTests for domain classes. 
  * No sense cover every class in 'technical assignment'
  */
 @ExtendWith(MockitoExtension.class)
-public class PlayerTest
+public class PlayerServiceTest
 {
   @Mock
   private Random random;
   
-  private Player player;
+  private PlayerService player;
   
   @BeforeEach
   public void beforeEach()
   {
-    player = new Player(random, 100);
+    player = new PlayerService(random, 100);
   }
   
   @Test
@@ -50,7 +50,7 @@ public class PlayerTest
   @Test
   public void testStartNewGameWithAutomaticInput()
   {
-    when(random.nextInt(anyInt())).thenReturn(77 - Player.NEXT_RANDOM_OFFSET);
+    when(random.nextInt(anyInt())).thenReturn(77 - PlayerService.NEXT_RANDOM_OFFSET);
     
     GameState gameState = player.startNewGameWithAutomaticInput();
     

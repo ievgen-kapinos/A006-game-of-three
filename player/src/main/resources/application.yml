@@ -1,6 +1,10 @@
 spring:
   kafka:
     bootstrapServers: localhost:9092
-    
+    consumer:
+      auto-offset-reset: earliest
+          
 gof:
+  kafka:
+    control-panel-ingress-topic: "control-panel-ingress"
   max-automatic-number: 102

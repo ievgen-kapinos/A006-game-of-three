@@ -3,31 +3,37 @@ package local.ikapinos.gof.player;
 import java.util.Optional;
 import java.util.Random;
 
-import javax.annotation.PostConstruct;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Service;
 
-public class Player
+import local.ikapinos.gof.common.AbstractGameEvent;
+
+@Service
+public class PlayerService
 {
-  @Autowired
-  private KafkaTemplate<Integer, Integer> template;
+  private static final Logger logger = LoggerFactory.getLogger(PlayerService.class); 
   
   public static final int NEXT_RANDOM_OFFSET = 2; 
   
   private final int maxAutomaticNumber;
   private final Random random;
   
-  public Player(Random random, int maxAutomaticNumber)
+  @Autowired
+  public PlayerService(Random random, 
+                       @Value("${gof.max-automatic-number:100}") int maxAutomaticNumber)
   {
     this.random = random;
     this.maxAutomaticNumber = maxAutomaticNumber;
   }
   
-  @PostConstruct
-  private void postConstruct() 
+  @KafkaListener(topics = "${gof.kafka.ingress-topic}")
+  public void handleIngressEvent(AbstractGameEvent gameEvent) 
   {
-    template.send("topic1", 12, 21);
+    logger.info("Recv: {}", gameEvent);
   }
   
   public GameState startNewGameWithManualInput(int number)
