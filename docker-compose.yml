@@ -17,6 +17,7 @@ services:
       
   control-panel:
     image: ikapinos/game-of-three-control-panel
+    build: ./control-panel
     container_name: control-panel
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
@@ -25,6 +26,7 @@ services:
   
   player1:
     image: ikapinos/game-of-three-player
+    build: ./player
     container_name: player1
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092

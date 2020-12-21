@@ -20,18 +20,14 @@ Two `kafka` topics used to route messages for player 1 and Player 2
    mvn clean package
    ```
    ![ui.png](/docs/mvn.png)
-1. Pack Docker images
+   
+1. Build Docker images for each `fat-jar` and start all microservises using  `docker-compose`
    ```
-   docker build -t ikapinos/game-of-three-control-panel ./control-panel
-   docker build -t ikapinos/game-of-three-player ./player
-   ```
-1. Start cluster
-   ```
-   docker-compose up -d
+   docker-compose up --build -d
    ```
    ![cmd.png](/docs/cmd.png)
    
-   ![cmd.png](/docs/docker.png)
+   ![cmd.png](/docs/docker.png) 
    
 1. Open `control-panel` web page
    ```
