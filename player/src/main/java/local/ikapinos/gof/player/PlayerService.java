@@ -68,7 +68,7 @@ public class PlayerService
     Integer number = startGameEvent.getNumber();
     if (number == null)
     {
-      // we want generate number in interval [2 .. maxNumber] to avoid trivial cases
+      // We want generate number in interval [2 .. maxNumber] to avoid trivial cases
       number = random.nextInt(maxNumber - NEXT_RANDOM_OFFSET) + NEXT_RANDOM_OFFSET;
     }
         
@@ -76,7 +76,7 @@ public class PlayerService
                                                     startGameEvent.getGameId(), 
                                                     null, // First move
                                                     number);   
-    producedPeerEvent(event);
+    fireEvent(event);
   }
   
   private void continueGame(ContinueGameEvent continueGameEvent)
@@ -92,7 +92,6 @@ public class PlayerService
     AbstractGameEvent event;
     if (newNumber == 1)
     { 
-      // Game ended 
       event = new EndGameEvent(serviceName,
                                continueGameEvent.getGameId(), 
                                added);
@@ -105,10 +104,10 @@ public class PlayerService
                                     newNumber);
     }
     
-    producedPeerEvent(event);
+    fireEvent(event);
   }
   
-  private void producedPeerEvent(AbstractGameEvent event)
+  private void fireEvent(AbstractGameEvent event)
   {
     kafkaTemplate.send(peerIngressTopic, 
                        null, // Partitions not used. No need for key. Otherwise use gameId (need to be ordered)
