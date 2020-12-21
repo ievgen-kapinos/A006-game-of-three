@@ -13,7 +13,7 @@ Game is running using five microservices:
 Two `kafka` topics used to route messages for Player 1 and Player 2 
 
 ## Run all in docker (deploy)
-1. Install and run `docker` and `docker-compose`
+1. Install `maven`,  `docker` and `docker-compose`
 1. Go to project root directory
 1. Create Spring Boot `fat-jars`  
    ```
