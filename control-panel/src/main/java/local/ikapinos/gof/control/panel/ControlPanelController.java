@@ -23,19 +23,22 @@ public class ControlPanelController
   private static final Logger logger = LoggerFactory.getLogger(ControlPanelController.class); 
   
   @Value("${gof.service-name}")
-  private String serviceName;
+  private String serviceName;  
+  
+  @Value("${gof.player1-service-name}")
+  private String player1ServiceName;  
+  
+  @Value("${gof.player2-service-name}")
+  private String player2ServiceName;
 
   @Value("${gof.max-number: 100}")
   private int maxNumber;
   
-  @Value("${gof.kafka.player1-ingress-topic}") 
-  private String player1IngressTopic;
-  
-  @Value("${gof.kafka.player2-ingress-topic}") 
-  private String player2IngressTopic;
+  @Value("${gof.kafka.events-topic}") 
+  private String eventsTopic;
   
   @Autowired
-  private KafkaTemplate<String, AbstractGameEvent> kafkaTemplate;
+  private KafkaTemplate<Integer, AbstractGameEvent> kafkaTemplate;
   
   @Autowired
   private SimpMessagingTemplate simpTemplate; 
@@ -55,35 +58,37 @@ public class ControlPanelController
   {
     logger.info("User request: start-game[playerId={}, gameId={}, number={}]", playerId, gameId, number);
     
-    String playerIngressTopic;
+    String destination;
     if (playerId == 1)
     {
-      playerIngressTopic = player1IngressTopic;
+      destination = player1ServiceName;
     }
     else if (playerId == 2)
     {
-      playerIngressTopic = player2IngressTopic;
+      destination = player2ServiceName;
     }
     else 
     {
       throw new IllegalArgumentException("Player Id should be 1 or 2, but got " + playerId);
     }
     
-    AbstractGameEvent event = new StartGameEvent(serviceName, gameId, number);
+    AbstractGameEvent event = new StartGameEvent(gameId,
+                                                 serviceName, // source
+                                                 destination,
+                                                 number);
     
-    kafkaTemplate.send(playerIngressTopic, 
-                       null, // Partitions not used. No need for key. Otherwise use gameId (need to be ordered)
+    kafkaTemplate.send(eventsTopic, 
+                       gameId, // We need ordered processing within Game
                        event);
     
-    logger.info("Produced: topic={}, message={}", playerIngressTopic, event);
+    logger.info("Produced: topic={}, key={}, message={}", eventsTopic, gameId, event);
   }
   
-  @KafkaListener(topics = {"${gof.kafka.player1-ingress-topic}", 
-                           "${gof.kafka.player2-ingress-topic}"})
-  public void handleEvent(ConsumerRecord<String, AbstractGameEvent> record) 
+  @KafkaListener(topics = {"${gof.kafka.events-topic}"})
+  public void handleEvent(ConsumerRecord<Integer, AbstractGameEvent> record) 
   {
     logger.info("Consumed: {}", record);
     
-    simpTemplate.convertAndSend("/topic/" + record.value().getGameId(), record.value());
+    simpTemplate.convertAndSend("/topic/" + record.key(), record.value());
   }
 }

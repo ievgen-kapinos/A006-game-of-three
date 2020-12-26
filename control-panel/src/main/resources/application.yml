@@ -11,8 +11,9 @@ spring:
 
 gof:
   service-name: control-panel
+  player1-service-name: player1
+  player2-service-name: player2
   max-number: 99
   kafka:
-    player1-ingress-topic: player1-ingress
-    player2-ingress-topic: player2-ingress
+    events-topic: gof-events
   

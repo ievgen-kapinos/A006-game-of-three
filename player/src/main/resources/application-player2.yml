@@ -4,10 +4,10 @@ server:
 spring:
   kafka:
     client-id: player2
-    
+    consumer:
+      group-id: player2    
+
 gof:
   service-name: player2
-  kafka:
-    ingress-topic: player2-ingress
-    peer-ingress-topic: player1-ingress    
+  peer-service-name: player1
     

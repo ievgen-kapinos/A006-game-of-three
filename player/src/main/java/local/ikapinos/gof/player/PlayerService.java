@@ -25,25 +25,33 @@ public class PlayerService
   
   @Value("${gof.service-name}")
   private String serviceName;
+  
+  @Value("${gof.peer-service-name}")
+  private String peerServiceName;
 
   @Value("${gof.max-number: 100}")
   private int maxNumber;
   
-  @Value("${gof.kafka.peer-ingress-topic}") 
-  private String peerIngressTopic;
+  @Value("${gof.kafka.events-topic}") 
+  private String eventsTopic;
   
   @Autowired
   private Random random;
   
   @Autowired
-  private KafkaTemplate<String, AbstractGameEvent> kafkaTemplate;
+  private KafkaTemplate<Integer, AbstractGameEvent> kafkaTemplate;
 
-  @KafkaListener(topics = "${gof.kafka.ingress-topic}")
-  public void handleEvent(ConsumerRecord<String, AbstractGameEvent> record) 
+  @KafkaListener(topics = "${gof.kafka.events-topic}")
+  public void handleEvent(ConsumerRecord<Integer, AbstractGameEvent> record) 
   {
     logger.info("Consumed: {}", record);
     
     AbstractGameEvent event = record.value();
+    
+    if (!event.getDestination().equals(serviceName))
+    {
+      return; // Ignore own messages
+    }
     
     if (event instanceof StartGameEvent) // Java 8. Need explicit casting
     {
@@ -72,8 +80,9 @@ public class PlayerService
       number = random.nextInt(maxNumber - NEXT_RANDOM_OFFSET) + NEXT_RANDOM_OFFSET;
     }
         
-    AbstractGameEvent event = new ContinueGameEvent(serviceName,
-                                                    startGameEvent.getGameId(), 
+    AbstractGameEvent event = new ContinueGameEvent(startGameEvent.getGameId(),
+                                                    serviceName,
+                                                    peerServiceName, 
                                                     null, // First move
                                                     number);   
     fireEvent(event);
@@ -92,14 +101,16 @@ public class PlayerService
     AbstractGameEvent event;
     if (newNumber == 1)
     { 
-      event = new EndGameEvent(serviceName,
-                               continueGameEvent.getGameId(), 
+      event = new EndGameEvent(continueGameEvent.getGameId(), 
+                               serviceName,
+                               peerServiceName,
                                added);
     }
     else
     {
-      event = new ContinueGameEvent(serviceName,
-                                    continueGameEvent.getGameId(), 
+      event = new ContinueGameEvent(continueGameEvent.getGameId(), 
+                                    serviceName,
+                                    peerServiceName,
                                     added, 
                                     newNumber);
     }
@@ -109,10 +120,11 @@ public class PlayerService
   
   private void fireEvent(AbstractGameEvent event)
   {
-    kafkaTemplate.send(peerIngressTopic, 
-                       null, // Partitions not used. No need for key. Otherwise use gameId (need to be ordered)
+    int key = event.getGameId();
+    kafkaTemplate.send(eventsTopic,
+                       key, // We need ordered processing within Game
                        event);
 
-    logger.info("Produced: topic={}, key={}, message={}", peerIngressTopic, serviceName, event); 
+    logger.info("Produced: topic={}, key={}, message={}", eventsTopic, key, event);
   }
 }

@@ -7,19 +7,19 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
 public abstract class AbstractGameEvent
 {
-  private final String serviceName;
   private final int gameId;
-
-  public AbstractGameEvent(String serviceName, 
-                           int gameId)
-  {
-    this.serviceName = serviceName;
-    this.gameId = gameId;
-  }
   
-  public String getServiceName()
+  private final String source; // service name
+  private final String destination;
+
+  public AbstractGameEvent(int gameId,
+                           String source, 
+                           String destination)
   {
-    return serviceName;
+    this.gameId = gameId;
+
+    this.source = source;
+    this.destination = destination;
   }
   
   public int getGameId()
@@ -27,13 +27,24 @@ public abstract class AbstractGameEvent
     return gameId;
   }
   
+  public String getSource()
+  {
+    return source;
+  }
+
+  public String getDestination()
+  {
+    return destination;
+  }
+
   @Override
   public int hashCode()
   {
     final int prime = 31;
     int result = 1;
+    result = prime * result + ((destination == null) ? 0 : destination.hashCode());
     result = prime * result + gameId;
-    result = prime * result + ((serviceName == null) ? 0 : serviceName.hashCode());
+    result = prime * result + ((source == null) ? 0 : source.hashCode());
     return result;
   }
 
@@ -47,14 +58,21 @@ public abstract class AbstractGameEvent
     if (getClass() != obj.getClass())
       return false;
     AbstractGameEvent other = (AbstractGameEvent)obj;
-    if (gameId != other.gameId)
-      return false;
-    if (serviceName == null)
+    if (destination == null)
     {
-      if (other.serviceName != null)
+      if (other.destination != null)
         return false;
     }
-    else if (!serviceName.equals(other.serviceName))
+    else if (!destination.equals(other.destination))
+      return false;
+    if (gameId != other.gameId)
+      return false;
+    if (source == null)
+    {
+      if (other.source != null)
+        return false;
+    }
+    else if (!source.equals(other.source))
       return false;
     return true;
   }
@@ -62,7 +80,8 @@ public abstract class AbstractGameEvent
   @Override
   public String toString()
   {
-    return "serviceName=" + serviceName + 
-        ", gameId=" + gameId;
+    return "gameId=" + gameId + 
+        ", source=" + source + 
+        ", destination=" + destination;
   }
 }

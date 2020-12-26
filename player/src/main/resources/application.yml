@@ -7,3 +7,5 @@ spring:
           
 gof:
   max-number: 99
+  kafka:
+    events-topic: gof-events

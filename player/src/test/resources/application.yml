@@ -8,7 +8,7 @@ spring:
 
 gof:
   service-name: player
+  peer-service-name: peer-player
   max-number: 150
   kafka:
-    ingress-topic: ingress    
-    peer-ingress-topic: peer-ingress    
+    events-topic: gof-events   

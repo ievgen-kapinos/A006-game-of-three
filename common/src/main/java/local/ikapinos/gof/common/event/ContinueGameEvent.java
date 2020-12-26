@@ -11,12 +11,13 @@ public class ContinueGameEvent extends AbstractGameEvent
   private final int number;
 
   @JsonCreator
-  public ContinueGameEvent(@JsonProperty("serviceName") String serviceName,
-                           @JsonProperty("gameId") int gameId,
+  public ContinueGameEvent(@JsonProperty("gameId") int gameId,
+                           @JsonProperty("source") String source, 
+                           @JsonProperty("destination") String destination,
                            @JsonProperty("added") Integer added,
                            @JsonProperty("number") int number)
   {
-    super(serviceName, gameId);
+    super(gameId, source, destination);
     
     this.added = added;
     this.number = number;

@@ -1,12 +1,11 @@
-
 package local.ikapinos.gof.common;
 
 import java.util.Map;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
+import org.apache.kafka.common.serialization.IntegerDeserializer;
+import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,18 +28,12 @@ import local.ikapinos.gof.common.event.StartGameEvent;
 public class KafkaConfiguration
 {
   @Bean
-  public LoggingErrorHandler errorHandler()
-  {
-    return new LoggingErrorHandler();
-  }
-
-  @Bean
-  public KafkaTemplate<String, AbstractGameEvent> kafkaTemplate(KafkaProperties properties)
+  public KafkaTemplate<Integer, AbstractGameEvent> kafkaTemplate(KafkaProperties properties)
   {
     Map<String, Object> props = properties.buildProducerProperties();
 
-    props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-    props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+    props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class); // gameId
+    props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);  // events
 
     return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(props));
   }
@@ -48,7 +41,6 @@ public class KafkaConfiguration
   @Bean
   public KafkaListenerContainerFactory<?> kafkaListenerContainerFactory(KafkaProperties properties)
   {
-
     Map<String, Object> props = properties.buildConsumerProperties();
 
     props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
@@ -56,8 +48,8 @@ public class KafkaConfiguration
     props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
     props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
     
-    props.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class);
-    props.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class.getName());
+    props.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, IntegerDeserializer.class);          // gameId
+    props.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class.getName()); // events
     props.put(JsonDeserializer.TRUSTED_PACKAGES, AbstractGameEvent.class.getPackage().getName());
 
     ConcurrentKafkaListenerContainerFactory<String, StartGameEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();

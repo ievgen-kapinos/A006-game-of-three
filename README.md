@@ -34,9 +34,6 @@ Two `kafka` topics used to route messages for Player 1 and Player 2
    http://localhost:8080/
    ```
    ![ui.png](/docs/ui.png)
-   You can find that order of events in UI may not reflect order of processing (like on this printscreen). 
-   This is expected and may be improved by merging existed two topics into one. In this case target `player` should be determined in new Event's field. 
-   This issue was not fixed since **order of processing is always correct** and **terminal output was enought** according to the task description.
 
 ## Run from source code (development)
 1. Install `maven`, `zookeeper` and `kafka` 
