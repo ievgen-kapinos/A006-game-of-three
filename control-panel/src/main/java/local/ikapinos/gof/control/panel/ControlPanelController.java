@@ -1,6 +1,5 @@
 package local.ikapinos.gof.control.panel;
 
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import local.ikapinos.gof.common.CommonProperties;
 import local.ikapinos.gof.common.event.AbstractGameEvent;
 import local.ikapinos.gof.common.event.StartGameEvent;
 
@@ -22,20 +22,14 @@ public class ControlPanelController
 {
   private static final Logger logger = LoggerFactory.getLogger(ControlPanelController.class); 
   
-  @Value("${gof.service-name}")
-  private String serviceName;  
+  @Autowired
+  private CommonProperties commonProperties;
   
   @Value("${gof.player1-service-name}")
   private String player1ServiceName;  
   
   @Value("${gof.player2-service-name}")
   private String player2ServiceName;
-
-  @Value("${gof.max-number: 100}")
-  private int maxNumber;
-  
-  @Value("${gof.kafka.events-topic}") 
-  private String eventsTopic;
   
   @Autowired
   private KafkaTemplate<Integer, AbstractGameEvent> kafkaTemplate;
@@ -46,7 +40,7 @@ public class ControlPanelController
   @GetMapping("/")
   public String index( Model model ) 
   {
-    model.addAttribute("maxNumber", maxNumber);
+    model.addAttribute("maxNumber", commonProperties.getMaxNumber());
     return "index";
   }
   
@@ -73,22 +67,22 @@ public class ControlPanelController
     }
     
     AbstractGameEvent event = new StartGameEvent(gameId,
-                                                 serviceName, // source
+                                                 commonProperties.getServiceName(), // source
                                                  destination,
                                                  number);
     
-    kafkaTemplate.send(eventsTopic, 
+    kafkaTemplate.send(commonProperties.getKafkaEventsTopic(), 
                        gameId, // We need ordered processing within Game
                        event);
     
-    logger.info("Produced: topic={}, key={}, message={}", eventsTopic, gameId, event);
+    logger.info("Produced: {}", event);
   }
   
-  @KafkaListener(topics = {"${gof.kafka.events-topic}"})
-  public void handleEvent(ConsumerRecord<Integer, AbstractGameEvent> record) 
+  @KafkaListener(topics = "#{commonProperties.kafkaEventsTopic}")
+  public void handleEvent(AbstractGameEvent event) 
   {
-    logger.info("Consumed: {}", record);
+    logger.info("Consumed: {}", event);
     
-    simpTemplate.convertAndSend("/topic/" + record.key(), record.value());
+    simpTemplate.convertAndSend("/topic/" + event.getGameId(), event);
   }
 }

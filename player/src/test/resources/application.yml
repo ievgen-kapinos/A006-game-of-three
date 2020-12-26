@@ -10,5 +10,4 @@ gof:
   service-name: player
   peer-service-name: peer-player
   max-number: 150
-  kafka:
-    events-topic: gof-events   
+  kafka-events-topic: gof-events   

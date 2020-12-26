@@ -9,10 +9,11 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+import local.ikapinos.gof.common.CommonProperties;
 import local.ikapinos.gof.common.KafkaConfiguration;
 
 @SpringBootApplication
-@Import(KafkaConfiguration.class)
+@Import({ KafkaConfiguration.class, CommonProperties.class })
 @EnableWebSocketMessageBroker
 public class ControlPanelApplication implements WebSocketMessageBrokerConfigurer
 {

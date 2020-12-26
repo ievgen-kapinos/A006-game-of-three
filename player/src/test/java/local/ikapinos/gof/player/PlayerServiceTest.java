@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.Random;
 
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -35,7 +34,7 @@ public class PlayerServiceTest
   @Value("${gof.peer-service-name}") 
   private String peerServiceName;
   
-  @Value("${gof.kafka.events-topic}") 
+  @Value("${gof.kafka-events-topic}") 
   private String eventsTopic;
   
   private final int gameId = 888;
@@ -54,10 +53,10 @@ public class PlayerServiceTest
   {
     when(random.nextInt(anyInt())).thenReturn(77 - PlayerService.NEXT_RANDOM_OFFSET);
     
-    player.handleEvent(createConsumerRecord(new StartGameEvent(gameId, 
-                                                               peerServiceName, 
-                                                               serviceName, 
-                                                               null)));
+    player.handleEvent(new StartGameEvent(gameId, 
+                                          peerServiceName, 
+                                          serviceName, 
+                                          null));
     
     verify(kafkaTemplate).send(eq(eventsTopic), 
                                eq(gameId), 
@@ -71,10 +70,10 @@ public class PlayerServiceTest
   @Test
   public void testStartNewGameWithManualInput()
   {    
-    player.handleEvent(createConsumerRecord(new StartGameEvent(gameId, 
-                                                               peerServiceName, 
-                                                               serviceName,
-                                                               56)));
+    player.handleEvent(new StartGameEvent(gameId, 
+                                          peerServiceName, 
+                                          serviceName,
+                                          56));
     
     verify(kafkaTemplate).send(eq(eventsTopic), 
                                eq(gameId), 
@@ -88,11 +87,11 @@ public class PlayerServiceTest
   @Test
   public void testContinueGameAddOne()
   {
-    player.handleEvent(createConsumerRecord(new ContinueGameEvent(gameId, 
-                                                                  peerServiceName, 
-                                                                  serviceName,
-                                                                  null, 
-                                                                  56)));
+    player.handleEvent(new ContinueGameEvent(gameId, 
+                                             peerServiceName, 
+                                             serviceName,
+                                             null, 
+                                             56));
     
     verify(kafkaTemplate).send(eq(eventsTopic), 
                                eq(gameId), 
@@ -106,11 +105,11 @@ public class PlayerServiceTest
   @Test
   public void testContinueGameMinusOne()
   {
-    player.handleEvent(createConsumerRecord(new ContinueGameEvent(gameId, 
-                                                                  peerServiceName, 
-                                                                  serviceName,
-                                                                  1, 
-                                                                  19)));
+    player.handleEvent(new ContinueGameEvent(gameId, 
+                                             peerServiceName, 
+                                             serviceName,
+                                             1, 
+                                             19));
     
     verify(kafkaTemplate).send(eq(eventsTopic), 
                                eq(gameId), 
@@ -124,11 +123,11 @@ public class PlayerServiceTest
   @Test
   public void testContinueGamePlusZero()
   {
-    player.handleEvent(createConsumerRecord(new ContinueGameEvent(gameId, 
-                                                                  peerServiceName, 
-                                                                  serviceName,
-                                                                  -1, 
-                                                                  6)));
+    player.handleEvent(new ContinueGameEvent(gameId, 
+                                             peerServiceName, 
+                                             serviceName,
+                                             -1, 
+                                             6));
     
     verify(kafkaTemplate).send(eq(eventsTopic), 
                                eq(gameId), 
@@ -142,11 +141,11 @@ public class PlayerServiceTest
   @Test
   public void testContinueGameAndWin()
   {
-    player.handleEvent(createConsumerRecord(new ContinueGameEvent(gameId, 
-                                                                  peerServiceName, 
-                                                                  serviceName,
-                                                                  0, 
-                                                                  3)));
+    player.handleEvent(new ContinueGameEvent(gameId, 
+                                             peerServiceName, 
+                                             serviceName,
+                                             0, 
+                                             3));
     
     verify(kafkaTemplate).send(eq(eventsTopic), 
                                eq(gameId), 
@@ -155,14 +154,5 @@ public class PlayerServiceTest
                                                    peerServiceName, 
                                                    0))); // (2+1)/3 = 1
 
-  }
-  
-  private ConsumerRecord<Integer, AbstractGameEvent> createConsumerRecord(AbstractGameEvent event)
-  {
-    return new ConsumerRecord<>(eventsTopic,       // topic 
-                                1,                 // partition
-                                0,                 // offset
-                                event.getGameId(), // key
-                                event);            // value
   }
 }

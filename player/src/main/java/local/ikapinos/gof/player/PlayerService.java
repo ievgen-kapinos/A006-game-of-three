@@ -2,7 +2,6 @@ package local.ikapinos.gof.player;
 
 import java.util.Random;
 
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import local.ikapinos.gof.common.CommonProperties;
 import local.ikapinos.gof.common.event.AbstractGameEvent;
 import local.ikapinos.gof.common.event.ContinueGameEvent;
 import local.ikapinos.gof.common.event.EndGameEvent;
@@ -23,17 +23,11 @@ public class PlayerService
   
   public static final int NEXT_RANDOM_OFFSET = 2; 
   
-  @Value("${gof.service-name}")
-  private String serviceName;
+  @Autowired
+  private CommonProperties commonProperties;
   
   @Value("${gof.peer-service-name}")
   private String peerServiceName;
-
-  @Value("${gof.max-number: 100}")
-  private int maxNumber;
-  
-  @Value("${gof.kafka.events-topic}") 
-  private String eventsTopic;
   
   @Autowired
   private Random random;
@@ -41,14 +35,12 @@ public class PlayerService
   @Autowired
   private KafkaTemplate<Integer, AbstractGameEvent> kafkaTemplate;
 
-  @KafkaListener(topics = "${gof.kafka.events-topic}")
-  public void handleEvent(ConsumerRecord<Integer, AbstractGameEvent> record) 
+  @KafkaListener(topics = "#{commonProperties.kafkaEventsTopic}")
+  public void handleEvent(AbstractGameEvent event) 
   {
-    logger.info("Consumed: {}", record);
+    logger.info("Consumed: {}", event);
     
-    AbstractGameEvent event = record.value();
-    
-    if (!event.getDestination().equals(serviceName))
+    if (!event.getDestination().equals(commonProperties.getServiceName()))
     {
       return; // Ignore own messages
     }
@@ -77,11 +69,11 @@ public class PlayerService
     if (number == null)
     {
       // We want generate number in interval [2 .. maxNumber] to avoid trivial cases
-      number = random.nextInt(maxNumber - NEXT_RANDOM_OFFSET) + NEXT_RANDOM_OFFSET;
+      number = random.nextInt(commonProperties.getMaxNumber() - NEXT_RANDOM_OFFSET) + NEXT_RANDOM_OFFSET;
     }
         
     AbstractGameEvent event = new ContinueGameEvent(startGameEvent.getGameId(),
-                                                    serviceName,
+                                                    commonProperties.getServiceName(),
                                                     peerServiceName, 
                                                     null, // First move
                                                     number);   
@@ -102,14 +94,14 @@ public class PlayerService
     if (newNumber == 1)
     { 
       event = new EndGameEvent(continueGameEvent.getGameId(), 
-                               serviceName,
+                               commonProperties.getServiceName(),
                                peerServiceName,
                                added);
     }
     else
     {
       event = new ContinueGameEvent(continueGameEvent.getGameId(), 
-                                    serviceName,
+                                    commonProperties.getServiceName(),
                                     peerServiceName,
                                     added, 
                                     newNumber);
@@ -121,10 +113,10 @@ public class PlayerService
   private void fireEvent(AbstractGameEvent event)
   {
     int key = event.getGameId();
-    kafkaTemplate.send(eventsTopic,
+    kafkaTemplate.send(commonProperties.getKafkaEventsTopic(),
                        key, // We need ordered processing within Game
                        event);
 
-    logger.info("Produced: topic={}, key={}, message={}", eventsTopic, key, event);
+    logger.info("Produced: {}", event);
   }
 }

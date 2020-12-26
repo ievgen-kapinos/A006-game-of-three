@@ -10,7 +10,7 @@ Game is running using five microservices:
 * `player1` - "player" instance #1
 * `player2` - "player" instance #2
 
-Two `kafka` topics used to route messages for Player 1 and Player 2 
+Single `kafka` topic is used to route all event messages 
 
 ## Run all in docker (deploy)
 1. Install `maven`,  `docker` and `docker-compose`
