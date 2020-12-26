@@ -1,8 +1,7 @@
 # Game of three
+Task description [pdf](/docs/Game%20of%20Three%20-%20Coding%20Challenge%20JAVA.pdf)
 
 ## Overall
-Task description [pdf](/docs/Game of Three - Coding Challenge JAVA.pdf)
-
 Game is running using five microservices:
 * `zookeeper` - infrastructure, kafka's dependency  (third party)
 * `kafka` - infrastructure (third party)
