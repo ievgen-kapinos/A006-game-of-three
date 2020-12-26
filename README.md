@@ -1,5 +1,4 @@
 # Game of three
-Task description [pdf](/docs/Game%20of%20Three%20-%20Coding%20Challenge%20JAVA.pdf)
 
 ## Overall
 Game is running using five microservices:
